@@ -1,5 +1,7 @@
 """AI-powered case study selection."""
 import json
+import os
+from pathlib import Path
 from typing import List, Dict, Any
 from openai import OpenAI
 from .config import TEMPLATE_CONFIG, DEFAULT_SUBTITLE, DEFAULT_IMAGE_PLACEHOLDER, DEFAULT_METRIC_PLACEHOLDER
@@ -179,6 +181,33 @@ def format_selected_for_pptx(selected: List[Dict[str, Any]]) -> Dict[str, str]:
         # Tab label (short org name)
         tab_key = TEMPLATE_CONFIG["tab_label"].format(n=i)
         placeholders[tab_key] = cs['org'].split()[0] if cs['org'] else f"Case {i}"
+    
+    # Third pass: Match logos to case studies using AI
+    available_logos = _get_available_logos()
+    used_logos = set()
+    
+    for i, cs in enumerate(selected, 1):
+        logo_key = TEMPLATE_CONFIG["case_study_logo"].format(n=i)
+        
+        # Get API key from environment
+        import os
+        api_key = os.getenv("OPENAI_API_KEY")
+        
+        if available_logos and api_key:
+            # Find available logos not yet used
+            remaining_logos = [logo for logo in available_logos if logo not in used_logos]
+            if remaining_logos:
+                matched_logo = _match_logo_to_case_study(cs, remaining_logos, api_key)
+                if matched_logo:
+                    placeholders[logo_key] = f"Logos/{matched_logo}.svg"
+                    used_logos.add(matched_logo)
+                    print(f"  Matched logo: {matched_logo}")
+                else:
+                    placeholders[logo_key] = ""
+            else:
+                placeholders[logo_key] = ""
+        else:
+            placeholders[logo_key] = ""
         
         # Slide 2: Add Challenge/Solution/Impact for ALL case studies (numbered)
         if 'challenges' in cs and 'solutions' in cs and 'impacts' in cs:
@@ -388,5 +417,74 @@ Return only the number, nothing else."""
             return available_cases[selected_idx]['image_file']
     except Exception as e:
         print(f"Warning: Could not find similar image via AI: {e}")
+    
+    return None
+
+
+def _get_available_logos() -> List[str]:
+    """Get list of available logo files from Logos directory."""
+    project_root = Path(__file__).parent.parent
+    logos_dir = project_root / "Logos"
+    
+    if not logos_dir.exists():
+        return []
+    
+    # Get all SVG files
+    logo_files = list(logos_dir.glob("*.svg"))
+    # Extract label names from filenames (remove .svg extension)
+    logo_labels = [f.stem for f in logo_files]
+    
+    return logo_labels
+
+
+def _match_logo_to_case_study(case_study: Dict[str, Any], available_logos: List[str], api_key: str) -> str:
+    """Use AI to match case study to best business value logo."""
+    if not available_logos:
+        return None
+    
+    client = OpenAI(api_key=api_key)
+    
+    # Build context from case study
+    title = case_study.get('title', case_study.get('deal_title', ''))
+    impacts = case_study.get('impacts', [])
+    angles = case_study.get('angles', [])
+    metric_label = case_study.get('metric_label', '')
+    
+    impact_text = "; ".join(impacts) if impacts else ""
+    angles_text = "; ".join(angles) if angles else ""
+    
+    # Build prompt
+    logos_list = "\n".join([f"{i+1}. {logo}" for i, logo in enumerate(available_logos)])
+    
+    prompt = f"""Match this case study to the BEST business value category.
+
+Case Study:
+Title: {title}
+Impact: {impact_text}
+Angles: {angles_text}
+Metric: {metric_label}
+
+Available Business Value Categories:
+{logos_list}
+
+Return ONLY the number (1-{len(available_logos)}) of the best matching category based on the primary business value/outcome delivered."""
+
+    try:
+        response = client.chat.completions.create(
+            model="gpt-5-mini",
+            max_completion_tokens=5000,
+            messages=[{
+                "role": "user",
+                "content": prompt
+            }]
+        )
+        
+        selection = response.choices[0].message.content.strip()
+        selected_idx = int(selection) - 1
+        
+        if 0 <= selected_idx < len(available_logos):
+            return available_logos[selected_idx]
+    except Exception as e:
+        print(f"Warning: Could not match logo via AI: {e}")
     
     return None

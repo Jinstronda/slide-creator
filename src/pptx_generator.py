@@ -410,7 +410,7 @@ def _align_title_line_description(slide, slide_idx: int = 0):
                 if image_shape:
                     desc_shape.left = image_shape.left + LINE_LEFT_OFFSET_EMU
                 
-                # Check if description text is too large and reduce font if needed
+                # Adjust description font size based on text length
                 if desc_shape.text and desc_text_frame.paragraphs:
                     desc_text_length = len(desc_shape.text)
                     # Get current font size
@@ -424,15 +424,29 @@ def _align_title_line_description(slide, slide_idx: int = 0):
                             if current_font_size:
                                 break
                     
-                    # If description is long (>200 chars) and font is 7pt, reduce to 6pt
-                    if current_font_size and desc_text_length > 200:
+                    if current_font_size:
                         original_pt = current_font_size.pt
-                        if original_pt >= 7:
-                            new_size = Pt(6)
+                        new_size_pt = original_pt
+                        
+                        # Adjust font based on description length
+                        if desc_text_length < 100:
+                            # Very short: increase by 2pt
+                            new_size_pt = original_pt + 2
+                            print(f"    Description short ({desc_text_length} chars): increased font {original_pt}pt -> {new_size_pt}pt")
+                        elif desc_text_length < 150:
+                            # Short: increase by 1pt
+                            new_size_pt = original_pt + 1
+                            print(f"    Description short ({desc_text_length} chars): increased font {original_pt}pt -> {new_size_pt}pt")
+                        elif desc_text_length > 200:
+                            # Long: reduce to 6pt
+                            new_size_pt = 6
+                            print(f"    Description long ({desc_text_length} chars): reduced font {original_pt}pt -> {new_size_pt}pt")
+                        
+                        # Apply new size if changed
+                        if new_size_pt != original_pt:
                             for para in desc_text_frame.paragraphs:
                                 for run in para.runs:
-                                    run.font.size = new_size
-                            print(f"    Description overflow: reduced font {original_pt}pt -> 6pt (length={desc_text_length})")
+                                    run.font.size = Pt(new_size_pt)
         elif desc_shape:
             print(f"  WARNING: Found description but no LINE for case study {i}")
             if hasattr(desc_shape, 'text_frame'):
@@ -450,7 +464,7 @@ def _align_title_line_description(slide, slide_idx: int = 0):
                 if image_shape:
                     desc_shape.left = image_shape.left + LINE_LEFT_OFFSET_EMU
                 
-                # Check if description text is too large and reduce font if needed
+                # Adjust description font size based on text length
                 if desc_shape.text and desc_text_frame.paragraphs:
                     desc_text_length = len(desc_shape.text)
                     # Get current font size
@@ -464,15 +478,29 @@ def _align_title_line_description(slide, slide_idx: int = 0):
                             if current_font_size:
                                 break
                     
-                    # If description is long (>200 chars) and font is 7pt, reduce to 6pt
-                    if current_font_size and desc_text_length > 200:
+                    if current_font_size:
                         original_pt = current_font_size.pt
-                        if original_pt >= 7:
-                            new_size = Pt(6)
+                        new_size_pt = original_pt
+                        
+                        # Adjust font based on description length
+                        if desc_text_length < 100:
+                            # Very short: increase by 2pt
+                            new_size_pt = original_pt + 2
+                            print(f"    Description short ({desc_text_length} chars): increased font {original_pt}pt -> {new_size_pt}pt")
+                        elif desc_text_length < 150:
+                            # Short: increase by 1pt
+                            new_size_pt = original_pt + 1
+                            print(f"    Description short ({desc_text_length} chars): increased font {original_pt}pt -> {new_size_pt}pt")
+                        elif desc_text_length > 200:
+                            # Long: reduce to 6pt
+                            new_size_pt = 6
+                            print(f"    Description long ({desc_text_length} chars): reduced font {original_pt}pt -> {new_size_pt}pt")
+                        
+                        # Apply new size if changed
+                        if new_size_pt != original_pt:
                             for para in desc_text_frame.paragraphs:
                                 for run in para.runs:
-                                    run.font.size = new_size
-                            print(f"    Description overflow: reduced font {original_pt}pt -> 6pt (length={desc_text_length})")
+                                    run.font.size = Pt(new_size_pt)
     
     print(f"{'='*80}\n")
 
@@ -585,17 +613,25 @@ def _align_metrics_with_labels(slide, slide_idx: int = 0):
             total_width_pt = metric_width_pt + spaces_width_pt + label_width_pt
             total_width_emu = int(total_width_pt * 12700)
             
-            # Check if it would overflow the metric box + label box combined width
-            available_width = metric_shape.width + label_shape.width
-            available_width_pt = available_width / 12700
+            # Check overflow against IMAGE width (for slide 0) or original available width
+            if slide_idx == 0:
+                # Use fixed image width for slide 0
+                max_allowed_width = STANDARD_IMAGE_WIDTH_EMU
+            else:
+                # For other slides, use metric box + label box combined width
+                max_allowed_width = metric_shape.width + label_shape.width
+            
+            max_allowed_width_pt = max_allowed_width / 12700
             
             print(f"  Calculated text width: {total_width_pt:.1f}pt ({total_width_emu/914400:.2f}in)")
-            print(f"  Available width: {available_width_pt:.1f}pt ({available_width/914400:.2f}in)")
+            print(f"  Max allowed width: {max_allowed_width_pt:.1f}pt ({max_allowed_width/914400:.2f}in)")
             
             # If overflow, reduce label font size
-            if total_width_emu > available_width:
-                reduction_factor = available_width / total_width_emu
+            if total_width_emu > max_allowed_width:
+                reduction_factor = max_allowed_width / total_width_emu
                 label_font_size = int(11 * reduction_factor)
+                # Ensure minimum font size of 8pt
+                label_font_size = max(8, label_font_size)
                 print(f"  OVERFLOW DETECTED! Reducing label font: 11pt -> {label_font_size}pt")
             
             # Clear existing runs and create new ones with different formatting
@@ -634,6 +670,10 @@ def _align_metrics_with_labels(slide, slide_idx: int = 0):
             # Get original label width to add to metric box
             original_label_width = label_shape.width
             new_combined_width = metric_shape.width + original_label_width
+            
+            # Ensure metric box doesn't exceed image width on slide 0
+            if slide_idx == 0:
+                new_combined_width = min(new_combined_width, STANDARD_IMAGE_WIDTH_EMU)
             
             old_width = metric_shape.width / 914400
             new_width = new_combined_width / 914400
@@ -851,12 +891,28 @@ def _replace_in_shapes(slide, placeholders: Dict[str, str], project_root: Path, 
     else:
         large_picture_shapes = []
     
+    # Separate logos from case study images
+    logo_shapes = []
+    case_study_image_shapes = []
+    
+    for shape in picture_shapes:
+        shape_name = getattr(shape, 'name', '').lower()
+        if 'logo' in shape_name:
+            logo_shapes.append(shape)
+        elif shape.width * shape.height >= MIN_IMAGE_SIZE:
+            case_study_image_shapes.append(shape)
+    
     # Match picture shapes to our case study images in order
     image_placeholders_ordered = [
         ('case_study_1_image', None),
         ('case_study_2_image', None),
         ('case_study_3_image', None),
         ('case_study_4_image', None),
+    ]
+    
+    # Match logo placeholders
+    logo_placeholders_ordered = [
+        'logo1', 'logo2', 'logo3', 'logo4'
     ]
     
     # Find which placeholders have image values
@@ -973,6 +1029,61 @@ def _replace_in_shapes(slide, placeholders: Dict[str, str], project_root: Path, 
         except:
             pass
     
+    # Handle logo replacements
+    if logo_shapes:
+        print(f"\n=== LOGO REPLACEMENT ON SLIDE {slide_idx} ===")
+        print(f"Found {len(logo_shapes)} logo placeholders")
+        
+        # Sort logos by name (logo1, logo2, etc.)
+        logo_shapes.sort(key=lambda s: getattr(s, 'name', ''))
+        
+        for idx, logo_placeholder in enumerate(logo_placeholders_ordered):
+            if logo_placeholder in placeholders and placeholders[logo_placeholder]:
+                logo_path_str = placeholders[logo_placeholder]
+                logo_full_path = project_root / logo_path_str
+                
+                if logo_full_path.exists() and idx < len(logo_shapes):
+                    old_logo = logo_shapes[idx]
+                    logo_left = old_logo.left
+                    logo_top = old_logo.top
+                    logo_width = old_logo.width
+                    logo_height = old_logo.height
+                    
+                    print(f"  Replacing {old_logo.name} with {logo_path_str}")
+                    print(f"    Position: left={logo_left/914400:.2f}in, top={logo_top/914400:.2f}in")
+                    print(f"    Size: {logo_width/914400:.2f}in x {logo_height/914400:.2f}in")
+                    
+                    # Remove old logo
+                    try:
+                        sp = old_logo.element
+                        sp.getparent().remove(sp)
+                    except Exception as e:
+                        print(f"    Warning: Could not remove logo: {e}")
+                    
+                    # Convert SVG to PNG before inserting
+                    try:
+                        # Calculate pixel dimensions from EMUs (assuming 96 DPI)
+                        width_inches = logo_width / 914400
+                        height_inches = logo_height / 914400
+                        width_px = int(width_inches * 96 * 3)  # 3x for better quality
+                        height_px = int(height_inches * 96 * 3)
+                        
+                        png_path = _convert_svg_to_png(str(logo_full_path), width_px, height_px)
+                        if png_path:
+                            temp_files.append(png_path)  # Add to cleanup list
+                            new_logo = slide.shapes.add_picture(
+                                png_path,
+                                logo_left,
+                                logo_top,
+                                logo_width,
+                                logo_height
+                            )
+                            print(f"    Successfully inserted logo (SVG->PNG)")
+                        else:
+                            print(f"    Warning: Could not convert SVG to PNG")
+                    except Exception as e:
+                        print(f"    Warning: Could not insert logo {logo_path_str}: {e}")
+    
     # Resize grey boxes to hug category text (after all text replacements are done)
     _resize_grey_boxes(slide, slide_idx)
     
@@ -1071,7 +1182,7 @@ def add_company_context(placeholders: Dict[str, str], company_name: str, company
         TEMPLATE_CONFIG["company_name"]: company_name,
         TEMPLATE_CONFIG["company_description"]: company_description,
         TEMPLATE_CONFIG["generation_date"]: datetime.now().strftime("%Y-%m-%d"),
-        TEMPLATE_CONFIG["slide_title"]: f"{company_name} - Selected Case Studies"
+        TEMPLATE_CONFIG["slide_title"]: f"Selected Case Studies — {company_name}"
     })
 
 
@@ -1169,3 +1280,46 @@ def _crop_image_to_aspect_ratio(image_path: str, target_width_cm: float, target_
     cropped_img.save(temp_path, 'JPEG', quality=95)
     
     return temp_path
+
+
+def _convert_svg_to_png(svg_path: str, width_px: int = 200, height_px: int = 200) -> str:
+    """Convert SVG to PNG using svglib + reportlab (works on all platforms).
+    
+    Args:
+        svg_path: Path to SVG file
+        width_px: Target width in pixels
+        height_px: Target height in pixels
+    
+    Returns:
+        Path to temporary PNG file or None if conversion fails
+    """
+    try:
+        from svglib.svglib import svg2rlg
+        from reportlab.graphics import renderPM
+        
+        # Convert SVG to ReportLab drawing
+        drawing = svg2rlg(svg_path)
+        
+        if not drawing:
+            print(f"Warning: Could not parse SVG {svg_path}")
+            return None
+        
+        # Scale drawing to desired size
+        scale_x = width_px / drawing.width if drawing.width > 0 else 1
+        scale_y = height_px / drawing.height if drawing.height > 0 else 1
+        scale = min(scale_x, scale_y)  # Maintain aspect ratio
+        
+        drawing.width = drawing.width * scale
+        drawing.height = drawing.height * scale
+        drawing.scale(scale, scale)
+        
+        # Create temporary PNG file
+        temp_fd, temp_path = tempfile.mkstemp(suffix='.png')
+        os.close(temp_fd)
+        
+        # Render to PNG at 300 DPI for high quality
+        renderPM.drawToFile(drawing, temp_path, fmt='PNG', dpi=300)
+        return temp_path
+    except Exception as e:
+        print(f"Warning: Could not convert SVG {svg_path}: {e}")
+        return None

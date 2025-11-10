@@ -8,7 +8,7 @@ DEFAULT_OUTPUT_DIR = "output"
 # Template placeholder configuration
 TEMPLATE_CONFIG = {
     # Slide-level placeholders
-    "slide_title": "slide_case_studies_title",  # Company Name - Selected Case Studies
+    "slide_title": "slide_case_studies_title",  # Selected Case Studies - Company Name
     "slide_subtitle": "slide_case_studies_subtitle",
     "4_cases_title": "4_cases_title",
     "slide_number": "sn",  # Page number for each slide
@@ -22,6 +22,7 @@ TEMPLATE_CONFIG = {
     "metric_label": "metric_label_case_study_{n}",
     "case_study_category": "case_study_{n}_category",
     "tab_label": "tab_{n}_label",
+    "case_study_logo": "logo{n}",  # logo1, logo2, logo3, logo4
     
     # Slide 2: Challenge/Solution/Impact for all 4 case studies
     "case_study_challenge": "case_study_{n}_challenge_{x}",  # n=1-4, x=1-3
