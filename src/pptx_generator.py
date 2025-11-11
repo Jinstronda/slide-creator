@@ -797,12 +797,16 @@ def _resize_grey_boxes(slide, slide_idx: int = 0):
             new_grey_width = calculated_text_width + left_padding_emu + right_padding_emu
             new_grey_height = text_height + (2 * GREY_BOX_VERTICAL_PADDING_EMU)
 
-            # Center grey box around text (equal padding on both sides)
+            # Center grey box around text (equal padding on all sides)
             total_horizontal_padding = left_padding_emu + right_padding_emu
             new_grey_left = text_left - (total_horizontal_padding // 2)
-            new_grey_top = text_top - GREY_BOX_VERTICAL_PADDING_EMU
 
-            print(f"  Centering grey box: total h-padding={total_horizontal_padding/914400:.4f}in, half={total_horizontal_padding//2/914400:.4f}in")
+            total_vertical_padding = 2 * GREY_BOX_VERTICAL_PADDING_EMU
+            new_grey_top = text_top - (total_vertical_padding // 2)
+
+            print(f"  Centering grey box:")
+            print(f"    Horizontal: total={total_horizontal_padding/914400:.4f}in, half={total_horizontal_padding//2/914400:.4f}in")
+            print(f"    Vertical: total={total_vertical_padding/914400:.4f}in, half={total_vertical_padding//2/914400:.4f}in")
 
             # Update grey box
             grey_box.width = int(new_grey_width)
