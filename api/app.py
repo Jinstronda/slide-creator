@@ -85,7 +85,8 @@ async def generate_presentation(request: GenerateRequest):
 
         safe_name = _sanitize_filename(request.company_name)
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        filename = f"{safe_name}_{request.presentation_type}-cases_{timestamp}.pptx"
+        suffix = "all-slides" if request.presentation_type == 0 else f"{request.presentation_type}-cases"
+        filename = f"{safe_name}_{suffix}_{timestamp}.pptx"
 
         return StreamingResponse(
             pptx_data,

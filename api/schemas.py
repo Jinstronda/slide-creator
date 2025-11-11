@@ -18,9 +18,9 @@ class GenerateRequest(BaseModel):
         max_length=2000,
         description="Detailed company description"
     )
-    presentation_type: Literal[1, 2, 4] = Field(
+    presentation_type: Literal[0, 1, 2, 4] = Field(
         ...,
-        description="Number of case studies (1, 2, or 4)"
+        description="Number of case studies: 0=all slides, 1=single case, 2=two cases, 4=four cases"
     )
 
     @field_validator('company_name')

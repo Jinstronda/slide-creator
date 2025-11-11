@@ -43,13 +43,14 @@ interface GenerateRequest {
 |-------|------|----------|------------|------------|----------------|
 | `company_name` | string | ✅ Yes | 1 | 200 | Any non-empty string |
 | `company_description` | string | ✅ Yes | 10 | 2000 | Any descriptive text |
-| `presentation_type` | integer | ✅ Yes | - | - | `1`, `2`, or `4` only |
+| `presentation_type` | integer | ✅ Yes | - | - | `0`, `1`, `2`, or `4` only |
 
 **Important:**
-- `presentation_type` controls how many case studies are selected
-- `1` = 1 case study presentation
-- `2` = 2 case studies presentation
-- `4` = 4 case studies presentation
+- `presentation_type` controls which slides are returned:
+  - `0` = All 3 slides (overview + grid + detailed single case)
+  - `1` = Only Slide 3 (single detailed case study)
+  - `2` = Only Slide 2 (2-case grid with Challenge/Solution/Impact)
+  - `4` = Only Slide 1 (4-case overview with metrics)
 
 ---
 
@@ -67,10 +68,16 @@ Content-Type: application/vnd.openxmlformats-officedocument.presentationml.prese
 
 **Body:** Binary PPTX file (streaming response)
 
-**Filename Format:** `{company_name}_{N}-cases_{timestamp}.pptx`
+**Filename Format:** `{company_name}_{suffix}_{timestamp}.pptx`
+- `suffix`: `"all-slides"` (type=0) or `"N-cases"` (type=1/2/4)
 - Spaces replaced with underscores
 - Special characters removed
 - Timestamp: `YYYYMMDD_HHMMSS`
+
+**Examples:**
+- `MedTech_Solutions_4-cases_20251111_120530.pptx` (4 cases, 1 slide)
+- `MedTech_Solutions_1-cases_20251111_120530.pptx` (1 case, 1 slide)
+- `MedTech_Solutions_all-slides_20251111_120530.pptx` (all slides)
 
 ---
 
@@ -83,7 +90,7 @@ Content-Type: application/vnd.openxmlformats-officedocument.presentationml.prese
 ```json
 {
   "error": "Invalid request",
-  "detail": "presentation_type must be 1, 2, or 4"
+  "detail": "presentation_type must be 0, 1, 2, or 4"
 }
 ```
 
@@ -117,7 +124,7 @@ Content-Type: application/vnd.openxmlformats-officedocument.presentationml.prese
 **Common validation errors:**
 - `company_name` is empty or missing
 - `company_description` is too short (<10 chars) or too long (>2000 chars)
-- `presentation_type` is not 1, 2, or 4
+- `presentation_type` is not 0, 1, 2, or 4
 - Missing required fields
 
 ### 500 Internal Server Error - Generation Failed
@@ -152,13 +159,13 @@ Content-Type: application/vnd.openxmlformats-officedocument.presentationml.prese
 interface GenerateRequest {
   company_name: string;
   company_description: string;
-  presentation_type: 1 | 2 | 4;
+  presentation_type: 0 | 1 | 2 | 4;
 }
 
 async function generatePresentation(
   companyName: string,
   companyDescription: string,
-  presentationType: 1 | 2 | 4
+  presentationType: 0 | 1 | 2 | 4
 ): Promise<void> {
   const API_URL = 'https://your-app.up.railway.app';
 
@@ -220,7 +227,7 @@ import { useState } from 'react';
 export function PresentationGenerator() {
   const [companyName, setCompanyName] = useState('');
   const [description, setDescription] = useState('');
-  const [presentationType, setPresentationType] = useState<1 | 2 | 4>(4);
+  const [presentationType, setPresentationType] = useState<0 | 1 | 2 | 4>(4);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -286,8 +293,9 @@ export function PresentationGenerator() {
 
       <select
         value={presentationType}
-        onChange={(e) => setPresentationType(Number(e.target.value) as 1 | 2 | 4)}
+        onChange={(e) => setPresentationType(Number(e.target.value) as 0 | 1 | 2 | 4)}
       >
+        <option value={0}>All Slides</option>
         <option value={1}>1 Case Study</option>
         <option value={2}>2 Case Studies</option>
         <option value={4}>4 Case Studies</option>
@@ -350,7 +358,7 @@ import axios from 'axios';
 async function downloadPresentation(
   companyName: string,
   description: string,
-  type: 1 | 2 | 4
+  type: 0 | 1 | 2 | 4
 ) {
   try {
     const response = await axios.post(
@@ -528,7 +536,7 @@ app.add_middleware(
 **Solution:** Backend CORS is configured. Check if you're sending correct headers.
 
 ### Issue: 422 validation error on valid input
-**Solution:** Check that `presentation_type` is **number** (1, 2, 4), not string ("1", "2", "4")
+**Solution:** Check that `presentation_type` is **number** (0, 1, 2, 4), not string ("0", "1", "2", "4")
 
 ### Issue: Downloaded file is corrupt
 **Solution:** Ensure `responseType: 'blob'` in fetch/axios. Don't try to parse binary as JSON.
