@@ -1,5 +1,13 @@
 [phases.setup]
-aptPkgs = ["libcairo2-dev", "pkg-config", "python3-dev"]
+aptPkgs = [
+  "libcairo2-dev",
+  "pkg-config",
+  "python3-dev",
+  "libxcb1-dev",
+  "libxcb-render0-dev",
+  "libxcb-shm0-dev",
+  "libx11-dev"
+]
 
 [start]
 cmd = "uvicorn api.app:app --host 0.0.0.0 --port $PORT"

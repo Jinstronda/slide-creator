@@ -1,0 +1,625 @@
+{
+  "case_studies": [
+    {
+      "org": "Ferrovial",
+      "deal_title": "Ferrovial",
+      "category": "Infrastructure",
+      "metric": "x2.5",
+      "metric_label": "Public Sector Revenue",
+      "title": "AI-Enabled Bid Management & Opportunity Screening",
+      "description": "Challenge: Analysts sift 400 pages per RFP; missed clauses cause disqualifications; pricing trends hidden in archives. Solution: Crawler ingests tenders, maps past answers, and flags compliance gaps. Impact: Fewer redlines, faster approvals, and data-backed pricing confidence.",
+      "challenges": [
+        "Analysts sift 400 pages per RFP",
+        "Missed clauses cause disqualifications",
+        "Pricing trends hidden in archives"
+      ],
+      "solutions": [
+        "Crawler ingests tenders",
+        "Maps past answers",
+        "Flags compliance gaps"
+      ],
+      "impacts": [
+        "Fewer redlines",
+        "Faster approvals",
+        "Data-backed pricing confidence"
+      ],
+      "angles": ["AI-Driven Bid Screening & Win-Rate Optimization"],
+      "comments": "",
+      "image_file": "Ferrovial.jpeg"
+    },
+    {
+      "org": "CNN",
+      "deal_title": "Media Capital 2",
+      "category": "Media",
+      "metric": "#1",
+      "metric_label": "Site During the Elections",
+      "title": "Social-Media Public Opinion Radar",
+      "description": "AI captures real-time sentiment across major platforms and feeds interactive dashboards, driving engagement and ad revenue.",
+      "angles": ["Sentiment Intelligence", "Matchday"],
+      "comments": "",
+      "image_file": "CNN.jpg"
+    },
+    {
+      "org": "Sage",
+      "deal_title": "Sage (Staffing)",
+      "category": "Software",
+      "metric": "-80%",
+      "metric_label": "Resolution Time",
+      "title": "User-Facing AI Copilot for Payroll",
+      "description": "Conversational assistant that answers payroll questions instantly, surfaces relevant records, and automates routine HR queries.",
+      "challenges": [
+        "Complex payroll queries",
+        "Time-consuming manual searches"
+      ],
+      "solutions": [
+        "Conversational AI assistant",
+        "Instant answers",
+        "Automated record surfacing"
+      ],
+      "impacts": [
+        "-80% resolution time",
+        "Reduced HR workload",
+        "Improved employee satisfaction"
+      ],
+      "angles": ["Compliance Coach", "Excellence", "Cash-Flow Forecasting"],
+      "comments": "",
+      "image_file": "Sage.jpg"
+    },
+    {
+      "org": "AstraZeneca",
+      "deal_title": "Astrazeneca | Patient Journey V1",
+      "category": "Biotech",
+      "metric": "-70%",
+      "metric_label": "Time-to-Insights",
+      "title": "ML-Powered Market Intelligence System",
+      "description": "Challenge: Broad TAM estimates and lack of patient-level linkage. Solution: Parsed national Rx data with LLMs to infer disease status. Impact: 10x tighter confidence bands, faster sizing cycles, and clearer insights.",
+      "challenges": [
+        "Broad TAM estimates",
+        "Lack of patient-level linkage"
+      ],
+      "solutions": [
+        "Parsed national Rx data with LLMs",
+        "Infer disease status"
+      ],
+      "impacts": [
+        "10x tighter confidence bands",
+        "Faster sizing cycles",
+        "Clearer insights"
+      ],
+      "angles": ["Intelligence for Specialists"],
+      "comments": "",
+      "image_file": "AstraZeneca.jpg"
+    },
+    {
+      "org": "SportTV",
+      "deal_title": "Modelo Preditivo",
+      "category": "Media",
+      "metric": "10x",
+      "metric_label": "More Streams Detected",
+      "title": "Illegal-Stream Takedown System",
+      "description": "24/7 virtual operator that mimics human browsing to find and remove illegal streams across web and social media, protecting broadcast rights, revenue, and compliance.",
+      "angles": ["Renewal Engine", "Consolidation", "Exploration"],
+      "comments": "",
+      "image_file": "Sports Broadcaster Owned by Fortune 500 Group.jpeg"
+    },
+    {
+      "org": "Sword Health",
+      "deal_title": "Sword Health (TBD)",
+      "category": "Healthcare",
+      "metric": "250",
+      "metric_label": "Sources Ingested",
+      "title": "AI Assistant for Multiproduct Sales",
+      "description": "Challenge: No unified sales view and inconsistent personalization. Solution: Chatbot with tailored recommendations and adaptive messaging. Impact: Improved conversions, cross-sell penetration, and salesforce productivity.",
+      "challenges": [
+        "No unified sales view",
+        "Inconsistent personalization"
+      ],
+      "solutions": [
+        "Chatbot with tailored recommendations",
+        "Adaptive messaging"
+      ],
+      "impacts": [
+        "Improved conversions",
+        "Cross-sell penetration",
+        "Salesforce productivity"
+      ],
+      "angles": ["Shortlisting Engine", "Multiproduct"],
+      "comments": "",
+      "image_file": "Sword.jpg"
+    },
+    {
+      "org": "Solverde.pt",
+      "deal_title": "Guia de Monserrate (TBD)",
+      "category": "Entertainment",
+      "metric": "75K",
+      "metric_label": "Interactions per Month",
+      "title": "Customer Support Performance Analytics",
+      "description": "Omnichannel platform that centralizes agent interactions, tracks KPIs in real time, and surfaces behavioral patterns with AI/ML.",
+      "angles": ["Conversion System", "Finance & Billing & Collection"],
+      "comments": "",
+      "image_file": "Solverde.jpg"
+    },
+    {
+      "org": "Rádio Popular",
+      "deal_title": "Rádio Popular (Etiqueta)",
+      "category": "Retail",
+      "metric": "-95%",
+      "metric_label": "Time Spent",
+      "title": "Real-Time Dynamic Pricing Engine",
+      "description": "ML-driven engine that continuously analyzes internal and competitor data to set optimal prices within strategic guardrails.",
+      "angles": ["Margin Optimizer"],
+      "comments": "",
+      "image_file": "Top 5 Appliance Retailer in Iberia.jpg"
+    },
+    {
+      "org": "Quadrante",
+      "deal_title": "Quadrante | Google Quadrante v1",
+      "category": "Engineering",
+      "metric": "€4.2m",
+      "metric_label": "Estimated Annual Savings",
+      "title": "Process-Optimization AI Agent for Quadrante",
+      "description": "Real-time ML engine predicts parameters, what-if simulator previews shifts, optimizer auto-adjusts controls. Pb & Zn recoveries rise together, cleaner concentrates, faster stabilization.",
+      "angles": ["Finance & Mining & Exploration"],
+      "comments": "",
+      "image_file": "c0c7e6c3-4605-4b44-96d5-1cee732c75e9.jpg"
+    },
+    {
+      "org": "Sage",
+      "deal_title": "Sage (Product Ecosystem)",
+      "category": "Software",
+      "metric": "3x",
+      "metric_label": "Faster AI Product Rollout",
+      "title": "AI Roadmap Acceleration for a Leading Software Vendor",
+      "description": "AI Center of Excellence embedded within core teams to accelerate AI feature rollout, unify data architecture, and deploy reusable model pipelines — turning Sage's suite into a continuously learning, intelligence-driven platform.",
+      "angles": ["Compliance Coach", "Excellence", "Cash-Flow Forecasting"],
+      "comments": "",
+      "image_file": "Sage.jpg"
+    },
+    {
+      "org": "Maia Clínica",
+      "deal_title": "Maia Clínica (3 Ângulos)",
+      "category": "Healthcare",
+      "metric": "320",
+      "metric_label": "Hours Saved per Month",
+      "title": "Clinical & Back-Office Operations Transformation",
+      "description": "Challenge: Fragmented scheduling and manual workflows reduced efficiency. Solution: AI automates scheduling, triage, and inventory planning. Impact: Improved patient throughput and experience, better staff utilization.",
+      "challenges": [
+        "Fragmented scheduling",
+        "Manual workflows reduced efficiency"
+      ],
+      "solutions": [
+        "AI automates scheduling",
+        "Triage automation",
+        "Inventory planning"
+      ],
+      "impacts": [
+        "Improved patient throughput",
+        "Better patient experience",
+        "Better staff utilization"
+      ],
+      "angles": ["Voice AI for Patient Acquisition", "Stock & Clinical Documentation"],
+      "comments": "",
+      "image_file": "PE-Backed Dental Clinic Chain.jpg"
+    },
+    {
+      "org": "DeskSkill",
+      "deal_title": "DeskSkill",
+      "category": "Business Services",
+      "metric": "65%",
+      "metric_label": "Faster Placement",
+      "title": "Core Recruiting Operations Automation",
+      "description": "Automated sourcing, enrichment, and evaluation through a unified recruiting OS. Copilots scored calls, synced insights to CRM, and prioritized next actions — compressing cycle times and scaling recruiter leverage.",
+      "angles": ["Autonomous Recruitment Platform"],
+      "comments": "",
+      "image_file": "Global Staffing Group.jpg"
+    },
+    {
+      "org": "Farmácias Grupo STS",
+      "deal_title": "Farmácias Grupo STS | AutoML, Entidades adjudicantes",
+      "category": "Retail",
+      "metric": "40K",
+      "metric_label": "SKUs Modeled",
+      "title": "Inventory & Working Capital Optimization System",
+      "description": "ML platform forecasts demand by store and SKU, automates replenishment, and optimizes supplier orders, reducing expirations, improving shelf availability, and releasing trapped working capital.",
+      "angles": [],
+      "comments": "",
+      "image_file": "STS.jpg"
+    },
+    {
+      "org": "Portir",
+      "deal_title": "Portir | Sea Pricing",
+      "category": "Logistics",
+      "metric": "90%",
+      "metric_label": "Faster Response Time",
+      "title": "Dynamic Pricing & Quote Orchestration Platform",
+      "description": "ML-driven quote engine benchmarks market rates, generates optimized pricing instantly, and syncs to CRM, cutting manual quoting effort, capturing margin opportunities, and strengthening client responsiveness.",
+      "angles": ["Optimization Engine", "Project"],
+      "comments": "",
+      "image_file": "Leading Freight Forwarder.jpg"
+    },
+    {
+      "org": "Millennium BCP",
+      "deal_title": "Millennium BCP (Management Assistant)",
+      "category": "Financial Services",
+      "metric": "150+",
+      "metric_label": "Sources Ingested",
+      "title": "AI Multiproduct Sales Copilot",
+      "description": "Chatbot with RAG consolidates portfolio information and personalizes client-specific recommendations, driving conversions, upsell, and cross-sell.",
+      "challenges": [
+        "Dispersed product information",
+        "Slow sales processes"
+      ],
+      "solutions": [
+        "RAG chatbot consolidates data",
+        "Client-specific recommendations",
+        "Portfolio unification"
+      ],
+      "impacts": [
+        "+40% proposal speed",
+        "+25% close rate",
+        "Improved conversions"
+      ],
+      "angles": ["Accelerator"],
+      "comments": "",
+      "image_file": "Major Bank in Southern Europe.jpg"
+    },
+    {
+      "org": "SPMS",
+      "deal_title": "SPMS (AIPEM)",
+      "category": "Healthcare",
+      "metric": "—",
+      "metric_label": "Currently ongoing",
+      "title": "AI Prescription Copilot for the Portuguese NHS",
+      "description": "Challenge: Rising complexity in prescriptions, hard-to-detect drug interactions, and manual verification. Solution: AI prescribing support, automated incompatibility scans, and instant drug query assistance. Impact: Safer prescribing, reduced clinician burden, and more consistent workflows.",
+      "challenges": [
+        "Rising complexity in prescriptions",
+        "Hard-to-detect drug interactions",
+        "Manual verification"
+      ],
+      "solutions": [
+        "AI prescribing support",
+        "Automated incompatibility scans",
+        "Instant drug query assistance"
+      ],
+      "impacts": [
+        "Safer prescribing",
+        "Reduced clinician burden",
+        "More consistent workflows"
+      ],
+      "angles": ["Compliance Copilot (NHS)"],
+      "comments": "adicionar novo concorso?",
+      "image_file": "SPMS.jpg"
+    },
+    {
+      "org": "Soldo",
+      "deal_title": "Solde (Knowledge Management)",
+      "category": "Software",
+      "metric": "80%+",
+      "metric_label": "CSAT Recovery",
+      "title": "In-App AI Customer Support Agent",
+      "description": "AI agent integrated into webapp with 1-click intents, multi-source RAG with semantic ranking, and automated inline feedback. +28pp in confirmed resolution, <3s initial response, CSAT >80%.",
+      "angles": ["Optimization Analytics"],
+      "comments": ""
+    },
+    {
+      "org": "Banco BiG",
+      "deal_title": "Banco BiG | Transformation part I",
+      "category": "Financial Services",
+      "metric": "150+",
+      "metric_label": "Sources Ingested",
+      "title": "Multiproduct AI Sales Agent",
+      "description": "Agent unifies product data and pricing into a single cockpit; corporate RAG generates recommendations and orchestrates pricing, credit, and KYC agents. +40% proposal speed, +25% close rate.",
+      "angles": ["Investment Recommender", "Predictive Client Scoring", "CRM Enrichment"],
+      "comments": ""
+    },
+    {
+      "org": "Grupo Embrace",
+      "deal_title": "Grupo Embrace | Solução de Compilação Automatizada de Propostas",
+      "category": "Infrastructure",
+      "metric": "125",
+      "metric_label": "Hours Saved per Month",
+      "title": "Public Procurement AI Agent for Ferrovial",
+      "description": "Crawler ingests tenders, maps past answers, and flags compliance gaps. Fewer redlines, faster approvals, and data-backed pricing confidence.",
+      "angles": ["Velocity Automation", "Automation"],
+      "comments": ""
+    },
+    {
+      "org": "AddVolt",
+      "deal_title": "AddVoll | Entidades adjudicantes",
+      "category": "Logistics",
+      "metric": "90%",
+      "metric_label": "Faster Response Time",
+      "title": "AI Agent for Pricing, Quotes, and Proposal Generation",
+      "description": "Agent manages requests and responses in real-time; compares rates and syncs with CRM. -90% response time, more agile and scalable logistics.",
+      "angles": ["Enterprise Knowledge Retrieval"],
+      "comments": ""
+    },
+    {
+      "org": "24 horas",
+      "deal_title": "24 horas | Automação de Media",
+      "category": "Media",
+      "metric": "#1",
+      "metric_label": "Most Visited Site",
+      "title": "Social Media Public Opinion Radar",
+      "description": "AI solution capturing real-time sentiment across major social networks, translating it into interactive dashboards, amplifying engagement and ad revenue.",
+      "angles": ["Distribution Engine"],
+      "comments": ""
+    },
+    {
+      "org": "Bene",
+      "deal_title": "Bene (2Logical) | Predictive ML",
+      "category": "Biotech",
+      "metric": "-15%",
+      "metric_label": "Time Savings per Sales Rep",
+      "title": "AI/ML Assistant for Pharmacy Sales",
+      "description": "AI chatbot over unified data with ML forecasts that flag at-risk accounts, driving double-digit uplift in sell-in/sell-out and higher productivity.",
+      "angles": ["Demand & Inventory Forecast", "Sales"],
+      "comments": ""
+    },
+    {
+      "org": "Clever Advertising",
+      "deal_title": "Clever Advertising",
+      "category": "Technology",
+      "metric": "—",
+      "metric_label": "Discovery Engine",
+      "title": "Discovery Engine",
+      "description": "Discovery engine for advertising optimization.",
+      "angles": ["Discovery Engine"],
+      "comments": ""
+    },
+    {
+      "org": "Code for All",
+      "deal_title": "Code for All",
+      "category": "Technology",
+      "metric": "—",
+      "metric_label": "Course",
+      "title": "Course",
+      "description": "Educational course platform.",
+      "angles": ["Course"],
+      "comments": ""
+    },
+    {
+      "org": "FAP",
+      "deal_title": "FAP (Chatbot)",
+      "category": "Public Sector",
+      "metric": "—",
+      "metric_label": "Copilot",
+      "title": "Copilot",
+      "description": "Chatbot copilot for public sector.",
+      "angles": ["Copilot"],
+      "comments": ""
+    },
+    {
+      "org": "GoingNext",
+      "deal_title": "GoingNext (PortugalDigital)",
+      "category": "Technology",
+      "metric": "—",
+      "metric_label": "Meeting Conversion",
+      "title": "Meeting Conversion Engine",
+      "description": "Meeting conversion optimization engine.",
+      "angles": ["Meeting Conversion Engine"],
+      "comments": ""
+    },
+    {
+      "org": "Gist",
+      "deal_title": "Gist (AI Creator App)",
+      "category": "Technology",
+      "metric": "—",
+      "metric_label": "Ops Control",
+      "title": "Ops Control Platform",
+      "description": "Operations control platform.",
+      "angles": ["Ops Control Platform"],
+      "comments": ""
+    },
+    {
+      "org": "WoMA",
+      "deal_title": "WoMA Project (Hadi Benkirane)",
+      "category": "Technology",
+      "metric": "—",
+      "metric_label": "Journey Orchestration",
+      "title": "Journey Orchestration",
+      "description": "Customer journey orchestration platform.",
+      "angles": ["Journey Orchestration"],
+      "comments": ""
+    },
+    {
+      "org": "Tripwix",
+      "deal_title": "Tripwix",
+      "category": "Technology",
+      "metric": "—",
+      "metric_label": "Listing Velocity",
+      "title": "Listing Velocity Automation",
+      "description": "Listing velocity automation platform.",
+      "angles": ["Listing Velocity Automation"],
+      "comments": ""
+    },
+    {
+      "org": "ICA & Nordigal",
+      "deal_title": "ICA & Nordigal (Digital)",
+      "category": "Technology",
+      "metric": "—",
+      "metric_label": "Sprint",
+      "title": "Sprint",
+      "description": "Digital sprint platform.",
+      "angles": ["Sprint"],
+      "comments": ""
+    },
+    {
+      "org": "Dados",
+      "deal_title": "Dados",
+      "category": "Technology",
+      "metric": "—",
+      "metric_label": "Analytics & Coaching",
+      "title": "Analytics & Coaching",
+      "description": "Analytics and coaching platform with churn prediction and centralized customer data lake.",
+      "angles": ["Analytics & Coaching", "Churn", "Centralized Customer Data Lake"],
+      "comments": ""
+    },
+    {
+      "org": "IPVC",
+      "deal_title": "IPVC (Student Churn ML)",
+      "category": "Education",
+      "metric": "—",
+      "metric_label": "Student Churn Prediction",
+      "title": "Student Churn ML",
+      "description": "Machine learning for student churn prediction.",
+      "angles": [],
+      "comments": ""
+    },
+    {
+      "org": "Lince Capital",
+      "deal_title": "Lince Capital (Transformation)",
+      "category": "Financial Services",
+      "metric": "—",
+      "metric_label": "Company Intelligence",
+      "title": "Company Intelligence & Prospecting",
+      "description": "Company intelligence and prospecting platform with investor KYC and AI capability in investor-deal flow.",
+      "angles": ["Company Intelligence & Prospecting", "Investor KYC", "AI Capability in Investor–Deal Flow"],
+      "comments": ""
+    },
+    {
+      "org": "Medicare",
+      "deal_title": "Medicare (ML & Customer Support)",
+      "category": "Healthcare",
+      "metric": "—",
+      "metric_label": "Revenue Recovery",
+      "title": "Revenue Recovery Engine",
+      "description": "Revenue recovery engine with analytics and outreach capabilities.",
+      "angles": ["Revenue Recovery Engine", "Analytics & Outreach"],
+      "comments": ""
+    },
+    {
+      "org": "Multisector",
+      "deal_title": "Multisector (Digital Summit)",
+      "category": "Technology",
+      "metric": "—",
+      "metric_label": "Generation & Outreach",
+      "title": "Generation & Outreach",
+      "description": "Lead generation and outreach platform.",
+      "angles": ["Generation & Outreach"],
+      "comments": ""
+    },
+    {
+      "org": "Monsterrats",
+      "deal_title": "Monsterrats (Navuli TBD)",
+      "category": "Healthcare",
+      "metric": "—",
+      "metric_label": "Adherence Voice Agent",
+      "title": "Adherence Voice Agent",
+      "description": "Voice agent for adherence with matchmaking capabilities.",
+      "angles": ["Adherence Voice Agent", "Matchmaking"],
+      "comments": ""
+    },
+    {
+      "org": "One Plus One",
+      "deal_title": "One Plus One (TBD)",
+      "category": "Technology",
+      "metric": "—",
+      "metric_label": "Project",
+      "title": "Project",
+      "description": "Project in development.",
+      "angles": ["Project"],
+      "comments": ""
+    },
+    {
+      "org": "Pet24",
+      "deal_title": "Pet24 (Horários com ML)",
+      "category": "Healthcare",
+      "metric": "—",
+      "metric_label": "Scheduling",
+      "title": "Scheduling",
+      "description": "ML-based scheduling platform for pet care.",
+      "angles": ["Scheduling"],
+      "comments": ""
+    },
+    {
+      "org": "Câmara de Matosinhos",
+      "deal_title": "Câmara de Matosinhos",
+      "category": "Public Sector",
+      "metric": "—",
+      "metric_label": "Intelligence Dashboard",
+      "title": "Intelligence Dashboard",
+      "description": "Intelligence dashboard for public sector.",
+      "angles": ["Intelligence Dashboard"],
+      "comments": ""
+    },
+    {
+      "org": "SST",
+      "deal_title": "SST (Entidades adjudicantes)",
+      "category": "Public Sector",
+      "metric": "—",
+      "metric_label": "Public Procurement",
+      "title": "Public Procurement",
+      "description": "Public procurement platform.",
+      "angles": [],
+      "comments": ""
+    },
+    {
+      "org": "Vet AI",
+      "deal_title": "Vet AI (DR, Demo, Chatbot + Report)",
+      "category": "Healthcare",
+      "metric": "—",
+      "metric_label": "Diagnostic Reporting",
+      "title": "Diagnostic Reporting Automation",
+      "description": "Diagnostic reporting automation with diagnostic capabilities.",
+      "angles": ["Diagnostic Reporting Automation", "Diagnostic"],
+      "comments": ""
+    },
+    {
+      "org": "Nortecnica",
+      "deal_title": "Nortecnica (TBD)",
+      "category": "Infrastructure",
+      "metric": "—",
+      "metric_label": "TBD",
+      "title": "TBD",
+      "description": "Project to be defined.",
+      "angles": ["(?)"],
+      "comments": ""
+    },
+    {
+      "org": "Cell Software",
+      "deal_title": "Cell Software (TBD)",
+      "category": "Technology",
+      "metric": "—",
+      "metric_label": "TBD",
+      "title": "TBD",
+      "description": "Project to be defined.",
+      "angles": ["(?)"],
+      "comments": ""
+    },
+    {
+      "org": "DeHouse",
+      "deal_title": "DeHouse (TBD)",
+      "category": "Technology",
+      "metric": "—",
+      "metric_label": "TBD",
+      "title": "TBD",
+      "description": "Project to be defined.",
+      "angles": ["(?)"],
+      "comments": ""
+    },
+    {
+      "org": "Infratuni",
+      "deal_title": "Infratuni (AutoML)",
+      "category": "Infrastructure",
+      "metric": "—",
+      "metric_label": "AutoML",
+      "title": "AutoML",
+      "description": "AutoML platform for infrastructure.",
+      "angles": ["(?)"],
+      "comments": ""
+    },
+    {
+      "org": "Leading Hospitality Group",
+      "deal_title": "Leading Hospitality Group",
+      "category": "Hospitality",
+      "metric": "15",
+      "metric_label": "Point Net Promoter Score Uplift",
+      "title": "Guest Sentiment Intelligence & Corrective Action Platform",
+      "description": "AI platform aggregates reviews, links them to operational data, and pinpoints satisfaction drivers by group, property, shift, and team — surfacing root causes, recommending next-best actions, and measuring impact to enable continuous improvement.",
+      "angles": [],
+      "comments": "",
+      "image_file": "Leading Hospitality Group.jpg"
+    }
+  ]
+}
