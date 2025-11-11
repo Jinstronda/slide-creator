@@ -165,7 +165,7 @@ def format_selected_for_pptx(selected: List[Dict[str, Any]]) -> Dict[str, str]:
         
         placeholders[metric_key] = raw_metric
         
-        # Metric label (from JSON - e.g., "Hours Saved per Month")
+        # Metric label (from JSON - e.g., "Hours Saved per Month") - KEEP ORIGINAL
         metric_label_key = TEMPLATE_CONFIG["metric_label"].format(n=i)
         metric_label = cs.get('metric_label', '')
         # Normalize to consistent width (40 chars total) for alignment
@@ -178,16 +178,17 @@ def format_selected_for_pptx(selected: List[Dict[str, Any]]) -> Dict[str, str]:
         category = cs.get('category', 'TECHNOLOGY')
         placeholders[category_key] = category.upper()
         
-        # Tab label (short org name)
+        # Tab label will be set by logo matching (below)
         tab_key = TEMPLATE_CONFIG["tab_label"].format(n=i)
-        placeholders[tab_key] = cs['org'].split()[0] if cs['org'] else f"Case {i}"
+        placeholders[tab_key] = ""  # Will be overwritten
     
-    # Third pass: Match logos to case studies using AI
+    # Third pass: Match logos to case studies using AI and set tab labels to business value
     available_logos = _get_available_logos()
     used_logos = set()
     
     for i, cs in enumerate(selected, 1):
         logo_key = TEMPLATE_CONFIG["case_study_logo"].format(n=i)
+        tab_key = TEMPLATE_CONFIG["tab_label"].format(n=i)
         
         # Get API key from environment
         import os
@@ -201,13 +202,20 @@ def format_selected_for_pptx(selected: List[Dict[str, Any]]) -> Dict[str, str]:
                 if matched_logo:
                     placeholders[logo_key] = f"Logos/{matched_logo}.svg"
                     used_logos.add(matched_logo)
+                    # Use logo name as the tab label (clean up any file extensions)
+                    clean_label = matched_logo.replace('.png', '').replace('.svg', '')
+                    placeholders[tab_key] = clean_label
                     print(f"  Matched logo: {matched_logo}")
+                    print(f"  Tab label: {clean_label}")
                 else:
                     placeholders[logo_key] = ""
+                    placeholders[tab_key] = cs['org'].split()[0] if cs['org'] else f"Case {i}"
             else:
                 placeholders[logo_key] = ""
+                placeholders[tab_key] = cs['org'].split()[0] if cs['org'] else f"Case {i}"
         else:
             placeholders[logo_key] = ""
+            placeholders[tab_key] = cs['org'].split()[0] if cs['org'] else f"Case {i}"
         
         # Slide 2: Add Challenge/Solution/Impact for ALL case studies (numbered)
         if 'challenges' in cs and 'solutions' in cs and 'impacts' in cs:

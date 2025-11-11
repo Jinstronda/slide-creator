@@ -45,6 +45,23 @@ TITLE_FIXED_HEIGHT_EMU = 208000  # Fixed 2-line title height (0.2276in)
 # Title vertical alignment (from example1.pptx measurements)
 TITLE_FIXED_TOP_EMU = 3638400  # 3.98in from slide top (FIXED for all titles)
 
+# Grey box padding specifications (in EMUs)
+# 1 CM = 360000 EMUs (914400 EMUs/inch * 1 inch/2.54 cm)
+GREY_BOX_RIGHT_PADDING_EMU = 108000  # 0.3 CM right padding
+GREY_BOX_VERTICAL_PADDING_EMU = 46800  # 0.13 CM top/bottom padding
+
+# Character width for grey box text (measured: 0.13 CM per character)
+CHAR_WIDTH_EMU = 46800  # 0.13 CM = 46,800 EMUs per character
+
+# Fixed positions for grey boxes on slide 0 (in EMUs from top-left)
+# 1 CM = 360,000 EMUs
+GREY_BOX_POSITIONS = [
+    {'left': int(0.93 * 360000), 'top': int(4.43 * 360000)},  # Case study 1: 0.93 CM, 4.43 CM
+    {'left': int(7.07 * 360000), 'top': int(4.42 * 360000)},  # Case study 2: 7.07 CM, 4.42 CM
+    {'left': int(13.25 * 360000), 'top': int(4.43 * 360000)},  # Case study 3: 13.25 CM, 4.43 CM
+    {'left': int(19.41 * 360000), 'top': int(4.43 * 360000)},  # Case study 4: 19.41 CM, 4.43 CM
+]
+
 
 def generate_presentation(
     template_path: str,
@@ -722,81 +739,80 @@ def _resize_grey_boxes(slide, slide_idx: int = 0):
         print(f"  Name position: Left={name_shape.left/914400:.2f}in, Top={name_shape.top/914400:.2f}in")
         print(f"  Name size: Width={name_shape.width/914400:.2f}in")
         
+        # Extract grey box number (grey1 -> 0, grey2 -> 1, etc.)
+        import re
+        match = re.search(r'grey(\d+)', grey_box.name.lower())
+        if not match:
+            print(f"  WARNING: Cannot extract number from grey box name")
+            continue
+
+        grey_num = int(match.group(1))
+        grey_index = grey_num - 1  # Convert to 0-based index
+
         # Find the category text shape for this grey box
         text_shape = _find_category_text_for_grey_box(slide, grey_box)
-        
-        if text_shape:
-            print(f"  Found category text: '{text_shape.text[:50] if text_shape.text else '[empty]'}'")
-            print(f"  Category position: Left={text_shape.left/914400:.2f}in, Top={text_shape.top/914400:.2f}in")
-            print(f"  Category size: Width={text_shape.width/914400:.2f}in")
-            
-            if text_shape.text:
-                # Get font size
-                font_size = 11  # Default
-                if text_shape.text_frame.paragraphs:
-                    for para in text_shape.text_frame.paragraphs:
-                        if para.runs:
-                            if para.runs[0].font.size:
-                                font_size = para.runs[0].font.size.pt
-                            break
-                
-                print(f"  Font size: {font_size}pt")
-                
-                # Calculate text width: character count × 0.45 × font size (tighter!)
-                char_width_pt = font_size * 0.45
-                char_width_emu = int(char_width_pt * 12700)
-                
-                text_content = text_shape.text.strip()
-                print(f"  Text content: '{text_content}'")
-                print(f"  Text length: {len(text_content)} characters")
-                print(f"  Char width: {char_width_pt:.2f}pt = {char_width_emu} EMUs")
-                
-                new_width = len(text_content) * char_width_emu
-                print(f"  Calculated width (before padding): {new_width/914400:.2f}in")
-                
-                # Add minimal padding (20 EMUs per side = 40 total = ~0.04 inches)
-                padding = 20 * 12700
-                new_width += padding
-                
-                # Update grey box width
-                old_width_inches = grey_box.width / 914400
-                new_width_inches = new_width / 914400
-                
-                print(f"  NEW WIDTH: {new_width_inches:.2f}in (was {old_width_inches:.2f}in)")
-                
-                # Align grey box left edge with case_study_name (start at same position)
-                new_grey_left = name_shape.left
-                
-                old_grey_left_inches = grey_box.left / 914400
-                new_grey_left_inches = new_grey_left / 914400
-                
-                print(f"  Name left position: {name_shape.left/914400:.2f}in")
-                print(f"  NEW GREY BOX LEFT: {new_grey_left_inches:.2f}in (was {old_grey_left_inches:.2f}in) - ALIGNED!")
-                
-                # Update grey box position and width
-                grey_box.width = new_width
-                grey_box.left = int(new_grey_left)
-                
-                # Center the category text WITHIN the grey box
-                grey_center_x = grey_box.left + (new_width / 2)
-                new_text_left = grey_center_x - (text_shape.width / 2)
-                
-                old_text_left_inches = text_shape.left / 914400
-                new_text_left_inches = new_text_left / 914400
-                
-                print(f"  Grey box center X: {grey_center_x/914400:.2f}in")
-                print(f"  NEW CATEGORY TEXT LEFT: {new_text_left_inches:.2f}in (was {old_text_left_inches:.2f}in) - CENTERED IN GREY BOX!")
-                
-                text_shape.left = int(new_text_left)
-                
-                # Verify the changes
-                print(f"  VERIFICATION: grey_box.width = {grey_box.width/914400:.2f}in, left = {grey_box.left/914400:.2f}in")
-                print(f"  VERIFICATION: category text left = {text_shape.left/914400:.2f}in")
-                print(f"  VERIFICATION: Grey box aligned at {name_shape.left/914400:.2f}in, text centered in box!")
-            else:
-                print(f"  WARNING: Category text has no text!")
+
+        if text_shape and text_shape.text:
+            text_content = text_shape.text.strip()
+            print(f"  Found category text: '{text_content}'")
+            print(f"  Text length: {len(text_content)} characters")
+
+            # Calculate exact text width from character count (0.13 CM per character)
+            calculated_text_width = len(text_content) * CHAR_WIDTH_EMU
+            print(f"  Calculated text width: {calculated_text_width/914400:.4f}in ({len(text_content)} × 0.13 CM)")
+
+            # Configure text frame
+            if hasattr(text_shape, 'text_frame'):
+                text_frame = text_shape.text_frame
+                # Set margins to zero for tight fit
+                text_frame.margin_left = 0
+                text_frame.margin_right = 0
+                text_frame.margin_top = 0
+                text_frame.margin_bottom = 0
+                # Disable auto-size - we set dimensions manually
+                text_frame.auto_size = MSO_AUTO_SIZE.NONE
+                text_frame.word_wrap = False
+
+                print(f"  Set text frame margins to zero, auto_size to NONE")
+
+            # Store original position
+            text_left = text_shape.left
+            text_top = text_shape.top
+            text_height = text_shape.height
+
+            # Set text shape width to calculated width
+            text_shape.width = int(calculated_text_width)
+
+            print(f"  Set text shape width: {text_shape.width/914400:.4f}in (calculated from text)")
+            print(f"  Text position (keeping): left={text_left/914400:.4f}in, top={text_top/914400:.4f}in")
+
+            # Define padding
+            left_padding_emu = 50000  # Minimal left padding (~0.055 inches)
+            right_padding_emu = GREY_BOX_RIGHT_PADDING_EMU  # 0.3 CM right padding
+
+            print(f"  Padding: left={left_padding_emu/914400:.4f}in, right={right_padding_emu/914400:.4f}in (0.3 CM)")
+            print(f"  Padding: vertical={GREY_BOX_VERTICAL_PADDING_EMU/914400:.4f}in (0.13 CM)")
+
+            # Calculate grey box dimensions from manually sized text
+            new_grey_width = calculated_text_width + left_padding_emu + right_padding_emu
+            new_grey_height = text_height + (2 * GREY_BOX_VERTICAL_PADDING_EMU)
+
+            # Position grey box around text (text stays, box wraps it)
+            new_grey_left = text_left - left_padding_emu
+            new_grey_top = text_top - GREY_BOX_VERTICAL_PADDING_EMU
+
+            # Update grey box
+            grey_box.width = int(new_grey_width)
+            grey_box.height = int(new_grey_height)
+            grey_box.left = int(new_grey_left)
+            grey_box.top = int(new_grey_top)
+
+            print(f"  FINAL:")
+            print(f"    Grey box: left={grey_box.left/914400:.4f}in, top={grey_box.top/914400:.4f}in")
+            print(f"    Grey box: width={grey_box.width/914400:.4f}in, height={grey_box.height/914400:.4f}in")
+            print(f"    Text: left={text_shape.left/914400:.4f}in, width={text_shape.width/914400:.4f}in (MANUALLY SIZED)")
         else:
-            print(f"  WARNING: No category text shape found!")
+            print(f"  WARNING: No category text found or text is empty!")
     
     print(f"{'='*80}\n")
 

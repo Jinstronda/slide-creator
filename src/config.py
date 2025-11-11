@@ -19,9 +19,9 @@ TEMPLATE_CONFIG = {
     "case_study_description": "case_study_{n}_description",
     "case_study_image": "case_study_{n}_image",
     "case_study_metric": "n{n}",  # n1, n2, n3, n4
-    "metric_label": "metric_label_case_study_{n}",
+    "metric_label": "metric_label_case_study_{n}",  # Original detailed metric labels
     "case_study_category": "case_study_{n}_category",
-    "tab_label": "tab_{n}_label",
+    "tab_label": "tab_{n}_label",  # Business value from logo names (shown in selection tabs)
     "case_study_logo": "logo{n}",  # logo1, logo2, logo3, logo4
     
     # Slide 2: Challenge/Solution/Impact for all 4 case studies
