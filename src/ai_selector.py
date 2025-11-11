@@ -11,50 +11,55 @@ def select_case_studies(
     case_studies: List[Dict[str, Any]],
     company_name: str,
     company_description: str,
-    api_key: str
+    api_key: str,
+    num_cases: int = 4
 ) -> List[Dict[str, Any]]:
-    """Select 4 most relevant case studies using AI."""
-    # Filter to only case studies with Challenge/Solution/Impact data
-    csi_cases = [cs for cs in case_studies if 'challenges' in cs and 'solutions' in cs and 'impacts' in cs]
-    
-    # If we don't have at least 4 with CSI data, fall back to all cases
-    if len(csi_cases) < 4:
-        print(f"Warning: Only {len(csi_cases)} case studies have Challenge/Solution/Impact data, using all cases")
-        cases_to_use = case_studies
-    else:
-        print(f"Using {len(csi_cases)} case studies with Challenge/Solution/Impact data")
-        cases_to_use = csi_cases
-    
+    """Select N most relevant case studies using AI."""
+    cases_to_use = _filter_cases_with_csi(case_studies, num_cases)
     client = OpenAI(api_key=api_key)
-    
-    prompt = _build_prompt(cases_to_use, company_name, company_description)
-    
+    prompt = _build_prompt(cases_to_use, company_name, company_description, num_cases)
+
     response = client.chat.completions.create(
-        model="gpt-4o-mini",
+        model="gpt-5-mini",
+        max_completion_tokens=20000,
         messages=[
             {"role": "system", "content": "You are an expert business analyst selecting relevant case studies."},
             {"role": "user", "content": prompt}
         ],
         response_format={"type": "json_object"}
     )
-    
+
     result = json.loads(response.choices[0].message.content)
     selected_indices = result.get("selected_indices", [])
-    
-    if len(selected_indices) != 4:
-        raise ValueError(f"Expected 4 selections, got {len(selected_indices)}")
-    
+
+    if len(selected_indices) != num_cases:
+        raise ValueError(f"Expected {num_cases} selections, got {len(selected_indices)}")
+
     return [cases_to_use[i] for i in selected_indices if i < len(cases_to_use)]
 
 
-def _build_prompt(case_studies: List[Dict[str, Any]], company_name: str, company_description: str) -> str:
+def _filter_cases_with_csi(case_studies: List[Dict[str, Any]], num_cases: int) -> List[Dict[str, Any]]:
+    """Filter to cases with Challenge/Solution/Impact data."""
+    csi_cases = [cs for cs in case_studies if 'challenges' in cs and 'solutions' in cs and 'impacts' in cs]
+
+    if len(csi_cases) < num_cases:
+        print(f"Warning: Only {len(csi_cases)} case studies have CSI data, using all cases")
+        return case_studies
+
+    print(f"Using {len(csi_cases)} case studies with CSI data")
+    return csi_cases
+
+
+def _build_prompt(case_studies: List[Dict[str, Any]], company_name: str, company_description: str, num_cases: int) -> str:
     """Build AI selection prompt."""
     case_list = "\n\n".join(
         f"Index: {i}\nTitle: {cs['deal_title']}\nOrg: {cs['org']}\nAngles: {', '.join(cs['angles'])}\nComments: {cs.get('comments', '')}"
         for i, cs in enumerate(case_studies)
     )
-    
-    return f"""Select the 4 most relevant case studies for this company:
+
+    indices_example = ", ".join([f"i{x}" for x in range(1, num_cases + 1)])
+
+    return f"""Select the {num_cases} most relevant case studies for this company:
 
 TARGET COMPANY:
 Name: {company_name}
@@ -66,7 +71,7 @@ CASE STUDIES:
 {case_list}
 
 Return JSON:
-{{"reasoning": "why these 4", "selected_indices": [i1, i2, i3, i4]}}"""
+{{"reasoning": "why these {num_cases}", "selected_indices": [{indices_example}]}}"""
 
 
 def format_selected_for_pptx(selected: List[Dict[str, Any]]) -> Dict[str, str]:
@@ -356,9 +361,9 @@ Return only the number."""
     try:
         client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
         response = client.chat.completions.create(
-            model="gpt-4o-mini",
-            messages=[{"role": "user", "content": prompt}],
-            temperature=0
+            model="gpt-5-mini",
+            max_completion_tokens=20000,
+            messages=[{"role": "user", "content": prompt}]
         )
         
         selection = response.choices[0].message.content.strip()
@@ -413,9 +418,9 @@ Return only the number, nothing else."""
     try:
         client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
         response = client.chat.completions.create(
-            model="gpt-4o-mini",
-            messages=[{"role": "user", "content": prompt}],
-            temperature=0
+            model="gpt-5-mini",
+            max_completion_tokens=20000,
+            messages=[{"role": "user", "content": prompt}]
         )
         
         selection = response.choices[0].message.content.strip()
@@ -480,7 +485,7 @@ Return ONLY the number (1-{len(available_logos)}) of the best matching category 
     try:
         response = client.chat.completions.create(
             model="gpt-5-mini",
-            max_completion_tokens=5000,
+            max_completion_tokens=20000,
             messages=[{
                 "role": "user",
                 "content": prompt

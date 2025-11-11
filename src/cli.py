@@ -5,9 +5,7 @@ import click
 from dotenv import load_dotenv
 from pathlib import Path
 
-from .excel_parser import get_case_studies
-from .ai_selector import select_case_studies, format_selected_for_pptx
-from .pptx_generator import generate_presentation, add_company_context
+from .core import generate_presentation_workflow
 
 
 # Import defaults from config
@@ -78,45 +76,28 @@ def main(company_name, company_description, output_dir, template, data, api_key)
         sys.exit(1)
     
     try:
-        # Step 1: Load case studies
-        click.echo(f"\n[1/3] Loading case studies from {os.path.basename(data_path)}...")
-        case_studies = get_case_studies(data_path)
-        click.echo(f"      Found {len(case_studies)} case studies")
-        
-        # Step 2: AI selection
-        click.echo(f"\n[2/3] Selecting best 4 case studies for {company_name}...")
-        selected = select_case_studies(
-            case_studies,
-            company_name,
-            company_description,
-            api_key
+        click.echo(f"\n[1/2] Generating presentation for {company_name}...")
+        click.echo(f"      Using {os.path.basename(data_path)}")
+
+        output_file = generate_presentation_workflow(
+            company_name=company_name,
+            company_description=company_description,
+            api_key=api_key,
+            num_cases=4,  # CLI defaults to 4 cases
+            data_path=data_path,
+            template_path=template_path,
+            output_dir=output_path
         )
-        click.echo("      Selected case studies:")
-        for i, cs in enumerate(selected, 1):
-            click.echo(f"      {i}. {cs['deal_title']} ({cs['org']})")
-        
-        # Step 3: Generate presentation
-        click.echo(f"\n[3/3] Generating PowerPoint presentation...")
-        placeholders = format_selected_for_pptx(selected)
-        add_company_context(placeholders, company_name, company_description)
-        
-        # Debug: Show challenge/solution/impact placeholders
-        click.echo("\n=== SLIDE 3 PLACEHOLDERS (Sample) ===")
-        for key in sorted(placeholders.keys()):
-            if 'challenge' in key or 'solution' in key or 'impact' in key:
-                value = placeholders[key][:50] if placeholders[key] else "[empty]"
-                click.echo(f"  {key}: {value}")
-        
-        output_file = generate_presentation(
-            template_path,
-            placeholders,
-            output_path,
-            company_name
-        )
-        
-        click.echo(f"\nSUCCESS! Presentation generated:")
-        click.echo(f"   {os.path.abspath(output_file)}")
-        
+
+        click.echo(f"\n[2/2] SUCCESS! Presentation generated:")
+        click.echo(f"      {os.path.abspath(output_file)}")
+
+    except FileNotFoundError as e:
+        click.echo(f"\nERROR: {str(e)}", err=True)
+        sys.exit(1)
+    except ValueError as e:
+        click.echo(f"\nERROR: {str(e)}", err=True)
+        sys.exit(1)
     except Exception as e:
         click.echo(f"\nERROR: {str(e)}", err=True)
         import traceback

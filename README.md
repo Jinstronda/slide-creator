@@ -30,6 +30,67 @@ uv run python -m src.cli `
 - ✅ Professional titles and descriptions
 - ✅ Company logos/images for each case study
 
+## REST API (Backend Endpoint)
+
+**Start the API server:**
+```powershell
+cd "C:\Users\joaop\Documents\Augusta Labs\Cases Study Slide Optimization\case_study_generator"
+conda deactivate
+uv run python run_api.py
+```
+
+Server runs on: `http://localhost:8000`
+**Interactive Docs**: `http://localhost:8000/docs` (Swagger UI)
+
+### Single Unified Endpoint
+
+**POST** `/api/generate` - Generate presentation with N case studies
+
+**Request Body:**
+```json
+{
+  "company_name": "string",
+  "company_description": "string (min 10 chars)",
+  "presentation_type": 1 | 2 | 4
+}
+```
+
+**Response:** Binary PPTX file (streaming, no temp files)
+
+**Example (1 case):**
+```powershell
+curl -X POST http://localhost:8000/api/generate `
+  -H "Content-Type: application/json" `
+  -d '{
+    "company_name": "MedTech Solutions",
+    "company_description": "Healthcare SaaS with 200 employees focused on patient engagement.",
+    "presentation_type": 1
+  }' `
+  --output presentation.pptx
+```
+
+**Example (4 cases):**
+```powershell
+curl -X POST http://localhost:8000/api/generate `
+  -H "Content-Type: application/json" `
+  -d '{
+    "company_name": "Global Logistics",
+    "company_description": "Large logistics company with warehouses across 15 countries.",
+    "presentation_type": 4
+  }' `
+  --output presentation.pptx
+```
+
+**Error Responses:**
+- `400` - Invalid request (bad presentation_type, description too short)
+- `401` - Missing OpenAI API key
+- `422` - Validation error (Pydantic automatic validation)
+- `500` - Generation failed
+
+**Performance:** 3-8 seconds per request (AI selection: 2-5s, PPTX generation: 1-3s)
+
+**CORS:** Enabled for all origins (update `api/app.py` for production)
+
 ## About
 
 Automates case study presentation generation. Give it a company description, it uses AI to select the 4 most relevant case studies from the database and generates a PowerPoint presentation.
@@ -37,7 +98,7 @@ Automates case study presentation generation. Give it a company description, it 
 ## How It Works
 
 1. **Parse**: Reads 46 case studies from Excel
-2. **Select**: GPT-4o-mini picks the 4 most relevant
+2. **Select**: GPT-5-mini picks the 4 most relevant
 3. **Generate**: Fills PowerPoint template
 
 ## Setup
@@ -155,7 +216,7 @@ Returns 4 diverse, compelling examples.
 
 **Key Decisions:**
 - Placeholder pattern: `{{variable}}` - visual and conflict-free
-- GPT-4o-mini - cost-effective with excellent results
+- GPT-5-mini - cost-effective with excellent results
 - Run-level text replacement - preserves formatting
 - Centralized config - easy template customization
 
