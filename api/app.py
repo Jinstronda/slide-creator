@@ -1,5 +1,6 @@
 """FastAPI application for case study presentation generation."""
 import os
+import logging
 from datetime import datetime
 from pathlib import Path
 from fastapi import FastAPI, HTTPException, status
@@ -18,11 +19,22 @@ from src.core import generate_presentation_to_memory
 
 load_dotenv()
 
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
 app = FastAPI(
     title="Case Study Presentation Generator API",
     description="AI-powered REST API for generating case study presentations",
     version="1.0.0"
 )
+
+@app.on_event("startup")
+async def startup_event():
+    port = os.getenv("PORT", "8000")
+    logger.info(f"Starting Case Study Generator API on port {port}")
+    logger.info(f"Health endpoint available at /health")
+    logger.info(f"API endpoint available at /api/generate")
 
 # CORS configuration for frontend access
 app.add_middleware(
@@ -101,6 +113,7 @@ async def generate_presentation(request: GenerateRequest):
 @app.get("/health")
 async def health_check():
     """Health check endpoint."""
+    logger.info("Health check called")
     return {"status": "healthy", "service": "case-study-generator"}
 
 
